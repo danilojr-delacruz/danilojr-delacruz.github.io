@@ -14,7 +14,8 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: danilojr-delacruz # the main title
+# Maybe xCorr? Cross Product, etc... Cross like Cruz
+title: xEntropy # the main title
 
 tagline: PhD in Random Systems @ Ox # it will display as the sub-title
 
