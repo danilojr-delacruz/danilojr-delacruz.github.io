@@ -7,8 +7,9 @@ publish: true
 math: true
 ---
 
-<!-- TODO: Can we make this a call out? -->
+{% include admonition.html type="abstract" title="Summary" body="
 Methods to efficiently compute gradients are important as gradients underpin the training of machine learning models. In particular, we compare forward and backward mode differentiation for gradients of function compositions. In the domain of Neural Networks, the ubiquitous backpropagation algorithm is simply backward mode differentiation. We will show why its forward counterpart has been historically disregarded and highlight a key limitation of backward mode differentiation.
+" %}
 
 ## Background
 Given functions $f_{0}(x) := x$ and $f_{1}, \dots, f_{m}$ with known Jacobians, we want to compute the Jacobian of their composition
@@ -37,8 +38,10 @@ $$
 
 We refer to each term in the product as a Transition Jacobian.
 
-> Recall that Jacobian of $f : \mathbb{R}^{d_{0}} \to \mathbb{R}^{d_{m}}$ is defined as
-> $$
+{% include admonition.html type="tip" title="Jacobian" body="
+Recall that Jacobian of $f : \mathbb{R}^{d_{0}} \to \mathbb{R}^{d_{m}}$ is defined as
+
+$$
 \left(\frac{df}{dx}\right)_{ij} = \frac{\partial f_{i}}{\partial x_{j}},\quad
 \frac{df}{dx} =
 \underset{ d_{m} \times d_{0} }{ \begin{bmatrix}
@@ -46,16 +49,20 @@ We refer to each term in the product as a Transition Jacobian.
 \frac{\partial f}{\partial x_{1}} & \cdots & \frac{\partial f}{\partial x_{d_{0}}} \\
 \vdots & \vdots & \vdots
 \end{bmatrix}. }
-> $$
->
-> See Notation section at end of page for clarification on what is meant by $\frac{df_{i}}{df_{i-1}}$.
+$$
+
+See Notation section at end of page for clarification on what is meant by $\frac{df_{i}}{df_{i-1}}$.
+"
+%}
 <!-- Can't link internally? -->
 
 Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently. We follow Appendix A.1 from {% cite kidgerNeuralDifferentialEquations2022 %} for details.
 
 ### Forward Mode Differentiation
-This method studies how the intermediate layers $f_{i}$ vary with the initial layer $x$. We apply a forward recursion until we obtain the Jacobian of the final layer $f$. In particular, for $i = 0, \dots, m-1$
+This method studies how the intermediate layers $f_{i}$ vary with the initial layer $x$. We apply a forward recursion until we obtain the Jacobian of the final layer $f$.
 
+{% include admonition.html type="info" title="Forward Mode Recursion" body="
+For $i = 0, \dots, m-1$,
 $$
 \underset{ d_{i+1} \times d_{0} }{ \frac{df_{i+1}}{dx}
 \vphantom{\frac{df_{i+1}}{df_{i}}}
@@ -69,6 +76,8 @@ $$
 \vphantom{\frac{df_{i+1}}{df_{i}}}
 }.
 $$
+"
+%}
 
 The algorithm comprises of one pass which computes $f(x)$ and $\frac{df}{dx}$
 - Base Case $f_{0} = x$ and $\frac{df_{0}}{dx} = I$ (Identity matrix)
@@ -80,8 +89,10 @@ The algorithm comprises of one pass which computes $f(x)$ and $\frac{df}{dx}$
 - At iteration $m$, return $\frac{df_{m}}{dx}$
 
 ### Backward Mode Differentiation
-This method studies how the output $f$ varies with the intermediate layers $f_{i}$. We apply a backward recursion until we obtain the Jacobian with respect to the initial layer $x$. In particular for $i = 0, \dots, m-1$, we use the formula
+This method studies how the output $f$ varies with the intermediate layers $f_{i}$. We apply a backward recursion until we obtain the Jacobian with respect to the initial layer $x$.
 
+{% include admonition.html type="info" title="Backward Mode Recursion" body="
+For $i = 0, \dots, m-1$,
 $$
 \underset{ d_{m} \times d_{m-i-1} }{ \frac{df_{m}}{df_{m-i - 1}}
 \vphantom{\frac{df_{m}}{df_{m-i}}}
@@ -95,6 +106,8 @@ $$
 \vphantom{\frac{df_{m}}{df_{m-i}}}
 }.
 $$
+"
+%}
 
 The algorithm comprises two passes.
 - The forward pass computes $f_{i}$ and the Transition Jacobians $\frac{df_{i}}{df_{i-1}}$
