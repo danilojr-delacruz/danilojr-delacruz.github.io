@@ -8,7 +8,7 @@ math: true
 ---
 
 <!-- TODO: Can we make this a call out? -->
-> Methods to efficiently compute gradients are important as they underpin the training of Machine Learning Models. In particular, we compare Forward and Reverse Mode Differentiation for gradient estimation of function compositions. The ubiquitous Backpropagation Algorithm is Reverse Mode Differentiation applied to Neural Networks and we will show why we typically ignore its forward counterpart.
+> Methods to efficiently compute gradients are important as they underpin the training of Machine Learning Models. In particular, we compare Forward and Reverse Mode Differentiation for gradient estimation of function compositions. The ubiquitous Backpropagation Algorithm is simply Reverse Mode Differentiation applied to Neural Networks. We will show why its forward counterpart has been ignored and highlight a key limitation of Backward Mode Differentiation.
 
 ## Background
 Given functions $$f_{0}, f_{1}, \dots, f_{m}$$ with known Jacobians, where $$f_{0}(x) = x$$. We want to compute the Jacobian of $$f$$.
