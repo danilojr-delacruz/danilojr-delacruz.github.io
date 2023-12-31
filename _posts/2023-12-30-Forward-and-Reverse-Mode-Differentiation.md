@@ -49,7 +49,8 @@ Now it remains to establish a scheme to compute $$\frac{df}{dx}$$ efficiently.
 \end{bmatrix}. }
 > $$
 >
-> See [Notation Remarks](#Notation) for clarification on what is meant by $$\frac{df_{i}}{df_{i-1}}$$.
+> See Notation at end of document for clarification on what is meant by $$\frac{df_{i}}{df_{i-1}}$$.
+<!-- Can't link internally? -->
 
 ### Forward-Mode Differentiation
 This method studies how the intermediate layers $$f_{i}$$ vary with the initial layer $$x$$. We apply a forward recursion until we obtain the Jacobian of the final layer $$f$$. In particular, for $$i = 0, \dots, m-1$$
@@ -152,14 +153,15 @@ In the past, the speed of training neural networks has been the main concern. Th
 |Backward|$$O(md^{2})$$|$$O(md^{3})$$|Stable|
 
 <!-- Better way to do referencing in markdown? -->
-# References
+## References
 - Appendix A.1 in [On Neural Differential Equations - Patrick Kidger (2022)](https://arxiv.org/pdf/2202.02435.pdf) for an introduction on Forward and Reverse mode differentiation.
 - [Section 7.6 Oxford Maths C6.1 Numerical Linear Algebra Notes (2023-2024)](https://courses.maths.ox.ac.uk/course/view.php?id=5024#section-1)
 - [Fast linear algebra is stable - James Demel, Ioana Dumitriu, Olga Holtz (2007)](https://arxiv.org/abs/math/0612264)
 - [Memory-Efficient Backpropagation Through Time - Deepmind (2016)](https://arxiv.org/abs/1606.03401)
 - [The Symplectic Adjoint Method: Memory-Efficient Backpropagation of Neural-Network-Based Differential Equations - Takashi Matsubara, Yuto Miyatake, Takaharu Yaguchi (2023)](https://ieeexplore.ieee.org/document/10045756)
 - [AlexNet](https://en.wikipedia.org/wiki/AlexNet)
-# Notation
+
+## Notation
 As an example, let us take $$m=3$$ where $$f = f_{3} \circ f_{2} \circ f_{1} \circ x$$ and let us use $$x_{i} \in \mathbb{R}^{d_{i-1}}$$ as a dummy variable to represent the input of $$f_{i}$$.
 Formally, Chain Rule is stated as
 
