@@ -116,6 +116,11 @@ paginate: 10
 # The base URL of your site
 baseurl: ""
 
+# ------------ Extensions
+
+# Use default for jekyll scholar
+# scholar:
+
 # ------------ The following options are not recommended to be modified ------------------
 
 kramdown:
