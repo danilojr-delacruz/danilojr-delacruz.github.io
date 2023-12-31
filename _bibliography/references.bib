@@ -1,0 +1,100 @@
+---
+---
+References
+==========
+
+@book{ruby,
+  title     = {The Ruby Programming Language},
+  author    = {Flanagan, David and Matsumoto, Yukihiro},
+  year      = {2008},
+  publisher = {O'Reilly Media}
+}
+
+
+@misc{kidgerNeuralDifferentialEquations2022,
+	title = {On {Neural} {Differential} {Equations}},
+	url = {http://arxiv.org/abs/2202.02435},
+	abstract = {The conjoining of dynamical systems and deep learning has become a topic of great interest. In particular, neural differential equations (NDEs) demonstrate that neural networks and differential equation are two sides of the same coin. Traditional parameterised differential equations are a special case. Many popular neural network architectures, such as residual networks and recurrent networks, are discretisations. NDEs are suitable for tackling generative problems, dynamical systems, and time series (particularly in physics, finance, ...) and are thus of interest to both modern machine learning and traditional mathematical modelling. NDEs offer high-capacity function approximation, strong priors on model space, the ability to handle irregular data, memory efficiency, and a wealth of available theory on both sides. This doctoral thesis provides an in-depth survey of the field. Topics include: neural ordinary differential equations (e.g. for hybrid neural/mechanistic modelling of physical systems); neural controlled differential equations (e.g. for learning functions of irregular time series); and neural stochastic differential equations (e.g. to produce generative models capable of representing complex stochastic dynamics, or sampling from complex high-dimensional distributions). Further topics include: numerical methods for NDEs (e.g. reversible differential equations solvers, backpropagation through differential equations, Brownian reconstruction); symbolic regression for dynamical systems (e.g. via regularised evolution); and deep implicit models (e.g. deep equilibrium models, differentiable optimisation). We anticipate this thesis will be of interest to anyone interested in the marriage of deep learning with dynamical systems, and hope it will provide a useful reference for the current state of the art.},
+	language = {en},
+	urldate = {2023-12-31},
+	publisher = {arXiv},
+	author = {Kidger, Patrick},
+	month = feb,
+	year = {2022},
+	note = {arXiv:2202.02435 [cs, math, stat]},
+	keywords = {Computer Science - Machine Learning, Mathematics - Classical Analysis and ODEs, Mathematics - Dynamical Systems, Mathematics - Numerical Analysis, Statistics - Machine Learning},
+	annote = {Comment: Doctoral thesis, Mathematical Institute, University of Oxford. 231 pages},
+	file = {Kidger - 2022 - On Neural Differential Equations.pdf:C\:\\Users\\delac\\Zotero\\storage\\7YTC63MY\\Kidger - 2022 - On Neural Differential Equations.pdf:application/pdf},
+}
+
+
+@book{ox_c61_nla,
+  title = {Numerical Linear Algebra},
+  author = {Yuji Nakatsukasa},
+  year = {2023},
+  publisher = {University of Oxford},
+  url = {https://courses.maths.ox.ac.uk/course/view.php?id=5024#section-1}
+}
+
+
+@article{demmelFastLinearAlgebra2007,
+	title = {Fast linear algebra is stable},
+	volume = {108},
+	issn = {0029-599X, 0945-3245},
+	url = {http://arxiv.org/abs/math/0612264},
+	doi = {10.1007/s00211-007-0114-x},
+	abstract = {In [23] we showed that a large class of fast recursive matrix multiplication algorithms is stable in a normwise sense, and that in fact if multiplication of n-by-n matrices can be done by any algorithm in O(nω+η) operations for any η {\textgreater} 0, then it can be done stably in O(nω+η) operations for any η {\textgreater} 0. Here we extend this result to show that essentially all standard linear algebra operations, including LU decomposition, QR decomposition, linear equation solving, matrix inversion, solving least squares problems, (generalized) eigenvalue problems and the singular value decomposition can also be done stably (in a normwise sense) in O(nω+η) operations.},
+	language = {en},
+	number = {1},
+	urldate = {2023-12-31},
+	journal = {Numerische Mathematik},
+	author = {Demmel, James and Dumitriu, Ioana and Holtz, Olga},
+	month = oct,
+	year = {2007},
+	note = {arXiv:math/0612264},
+	keywords = {Mathematics - Numerical Analysis, 65Y20, 65F30, 65G50, 68Q17, 68Q25, Computer Science - Computational Complexity, Computer Science - Data Structures and Algorithms},
+	pages = {59--91},
+	annote = {Comment: 26 pages; final version; to appear in Numerische Mathematik},
+	file = {Demmel et al. - 2007 - Fast linear algebra is stable.pdf:C\:\\Users\\delac\\Zotero\\storage\\T5GASZB3\\Demmel et al. - 2007 - Fast linear algebra is stable.pdf:application/pdf},
+}
+
+
+@misc{gruslysMemoryEfficientBackpropagationTime2016,
+	title = {Memory-{Efficient} {Backpropagation} {Through} {Time}},
+	url = {http://arxiv.org/abs/1606.03401},
+	abstract = {We propose a novel approach to reduce memory consumption of the backpropagation through time (BPTT) algorithm when training recurrent neural networks (RNNs). Our approach uses dynamic programming to balance a trade-off between caching of intermediate results and recomputation. The algorithm is capable of tightly ﬁtting within almost any user-set memory budget while ﬁnding an optimal execution policy minimizing the computational cost. Computational devices have limited memory capacity and maximizing a computational performance given a ﬁxed memory budget is a practical use-case. We provide asymptotic computational upper bounds for various regimes. The algorithm is particularly effective for long sequences. For sequences of length 1000, our algorithm saves 95\% of memory usage while using only one third more time per iteration than the standard BPTT.},
+	language = {en},
+	urldate = {2023-12-31},
+	publisher = {arXiv},
+	author = {Gruslys, Audrūnas and Munos, Remi and Danihelka, Ivo and Lanctot, Marc and Graves, Alex},
+	month = jun,
+	year = {2016},
+	note = {arXiv:1606.03401 [cs]},
+	keywords = {Computer Science - Machine Learning, Computer Science - Neural and Evolutionary Computing},
+	file = {Gruslys et al. - 2016 - Memory-Efficient Backpropagation Through Time.pdf:C\:\\Users\\delac\\Zotero\\storage\\5FKLX3CG\\Gruslys et al. - 2016 - Memory-Efficient Backpropagation Through Time.pdf:application/pdf},
+}
+
+
+@article{matsubaraSymplecticAdjointMethod2023,
+	title = {The {Symplectic} {Adjoint} {Method}: {Memory}-{Efficient} {Backpropagation} of {Neural}-{Network}-{Based} {Differential} {Equations}},
+	issn = {2162-237X, 2162-2388},
+	shorttitle = {The {Symplectic} {Adjoint} {Method}},
+	url = {https://ieeexplore.ieee.org/document/10045756/},
+	doi = {10.1109/TNNLS.2023.3242345},
+	abstract = {The combination of neural networks and numerical integration can provide highly accurate models of continuoustime dynamical systems and probabilistic distributions. However, if a neural network is used n times during numerical integration, the whole computation graph can be considered as a network n times deeper than the original. The backpropagation algorithm consumes memory in proportion to the number of uses times of the network size, causing practical difficulties. This is true even if a checkpointing scheme divides the computation graph into subgraphs. Alternatively, the adjoint method obtains a gradient by a numerical integration backward in time; although this method consumes memory only for single-network use, the computational cost of suppressing numerical errors is high. The symplectic adjoint method proposed in this study, an adjoint method solved by a symplectic integrator, obtains the exact gradient (up to rounding error) with memory proportional to the number of uses plus the network size. The theoretical analysis shows that it consumes much less memory than the naive backpropagation algorithm and checkpointing schemes. The experiments verify the theory, and they also demonstrate that the symplectic adjoint method is faster than the adjoint method and is more robust to rounding errors.},
+	language = {en},
+	urldate = {2023-12-31},
+	journal = {IEEE Transactions on Neural Networks and Learning Systems},
+	author = {Matsubara, Takashi and Miyatake, Yuto and Yaguchi, Takaharu},
+	year = {2023},
+	pages = {1--13},
+	file = {Matsubara et al. - 2023 - The Symplectic Adjoint Method Memory-Efficient Ba.pdf:C\:\\Users\\delac\\Zotero\\storage\\9Q5FQ7B2\\Matsubara et al. - 2023 - The Symplectic Adjoint Method Memory-Efficient Ba.pdf:application/pdf},
+}
+
+@misc{wiki:AlexNet,
+   author = "Wikipedia",
+   title = "{AlexNet} --- {W}ikipedia{,} The Free Encyclopedia",
+   year = "2023",
+   howpublished = {\url{http://en.wikipedia.org/w/index.php?title=AlexNet&oldid=1182803102}},
+   note = "[Online; accessed 31-December-2023]"
+ }

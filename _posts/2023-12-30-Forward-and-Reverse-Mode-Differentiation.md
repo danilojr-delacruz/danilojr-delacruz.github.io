@@ -35,7 +35,7 @@ $$
 = \prod_{i=1}^{m+1} \frac{df_{i}}{df_{i-1}}.
 $$
 
-Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently.
+Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently. We follow Appendix A.1 from {% cite kidgerNeuralDifferentialEquations2022 %} for details.
 
 > Recall that Jacobian of $f : \mathbb{R}^{d_{0}} \to \mathbb{R}^{d_{m}}$ is defined as
 > $$
@@ -119,9 +119,9 @@ For Forward mode this is $O(md^{3})$ whereas only having to perform Vector-Matri
 ### Numerical Stability
 This discrepancy in computational cost is closely related to the common trick used in Numerical Linear Algebra where $ABx$ is evaluated as $A(Bx)$ as opposed to $(AB)x$.
 
-The other reason this is beneficial, is because Matrix-Matrix multiplication is not numerically (backward) stable whereas Matrix-Vector Multiplication is. See [Section 7.6 Oxford Maths C6.1 Numerical Linear Algebra Notes (2023-2024)](https://courses.maths.ox.ac.uk/course/view.php?id=5024#section-1). This means that a naive implementation of Forward Mode would be unstable.
+The other reason this is beneficial, is because Matrix-Matrix multiplication is not numerically (backward) stable whereas Matrix-Vector Multiplication is. See {% cite ox_c61_nla -L chapter -l 7.6 %}. This means that a naive implementation of Forward Mode would be unstable.
 
-The stability of matrix multiplication can be improved for a slight increase in computational complexity, see [Fast linear algebra is stable - James Demel, Ioana Dumitriu, Olga Holtz (2007)](https://arxiv.org/abs/math/0612264). Despite, the paper claiming these algorithms are parallelisable, it is unlikely to have an implementation with minimised constant factors due to its age. In particular this means, the increase in computing time would be exacerbated by a difference in software.
+The stability of matrix multiplication can be improved for a slight increase in computational complexity, see {% cite demmelFastLinearAlgebra2007 %}. Despite, the paper claiming these algorithms are parallelisable, it is unlikely to have an implementation with minimised constant factors due to its age. In particular this means, the increase in computing time would be exacerbated by a difference in software.
 
 These two reasons demonstrate why Backward Mode is appealing. However the next section, demonstrates its major caveat.
 
@@ -131,9 +131,9 @@ In Forward Mode, we only need to store the previous transition jacobians $\frac{
 On the other hand, Backward Mode needs to store all the transition jacobians during the forward pass as it can only use them during the backward pass. This leads to a memory cost of $O(md^{3})$.
 
 As the computational powers of computers are plateauing and applications often call for neural networks with millions of parameters, memory can be a bottleneck. There has been some attempts to alleviate this.
-- [Memory-Efficient Backpropagation Through Time - Deepmind (2016)](https://arxiv.org/abs/1606.03401) proposed a method which decreased the memory usage by 95% for backpropagation in a recurrent neural network. For recurrent neural networks, because the depth $m$ is large, the memory cost is acutely felt.
+- Memory-Efficient Backpropagation Through Time {% cite gruslysMemoryEfficientBackpropagationTime2016 %} proposed a method which decreased the memory usage by 95% for backpropagation in a recurrent neural network. For recurrent neural networks, because the depth $m$ is large, the memory cost is acutely felt.
     - (Unsure: I will aim to discuss this paper in another post. But I think the idea is to recompute the earlier gradients from scratch in the backward pass as opposed to holding them for the entire run. This increases computational cost.)
-- [The Symplectic Adjoint Method: Memory-Efficient Backpropagation of Neural-Network-Based Differential Equations - Takashi Matsubara, Yuto Miyatake, Takaharu Yaguchi (2023)](https://ieeexplore.ieee.org/document/10045756)
+- The Symplectic Adjoint Method: Memory-Efficient Backpropagation of Neural-Network-Based Differential Equations {% cite matsubaraSymplecticAdjointMethod2023 %}
     - Neural-Based Differential Equation refers to $du = f_{\theta}(u) dt$ where $f_{\theta}$ is a neural network.
     - Evaluating $u$ can be done through numerical integration which requires evaluation of $f_{\theta}$ say $n$ times. As we need to combine these values, we need to hold $O(nmd^{3})$ in memory.
     - The adjoint method only requires $O(md^{3})$ memory but is numerically unstable.
@@ -146,21 +146,15 @@ Forward Mode computes gradients while it evaluates the function $f$ whereas Back
 
 Since $f$ is a typically a scalar, Forward Mode takes longer to run whereas Backward Mode requires more memory.
 
-In the past, the speed of training neural networks has been the main concern. The application of the Backpropagation algorithm and advances in GPU-acceleration were necessary to demonstrate the feasibility of Neural networks, see [AlexNet](https://en.wikipedia.org/wiki/AlexNet). However, memory limitations are now emerging as a concern and practitioners will need to find a way to balance the trade-off between Computational Time and Memory Space.
+In the past, the speed of training neural networks has been the main concern. The application of the Backpropagation algorithm and advances in GPU-acceleration were necessary to demonstrate the feasibility of Neural networks, see AlexNet {% cite wiki:AlexNet %}. However, memory limitations are now emerging as a concern and practitioners will need to find a way to balance the trade-off between Computational Time and Memory Space.
 
 |Mode|Computation|Memory|Stability|
 |-|-|-|-|
 |Forward|$O(md^{3})$|$O(d^{3})$|Unstable|
 |Backward|$O(md^{2})$|$O(md^{3})$|Stable|
 
-<!-- Better way to do referencing in markdown? -->
 ## References
-- Appendix A.1 in [On Neural Differential Equations - Patrick Kidger (2022)](https://arxiv.org/pdf/2202.02435.pdf) for an introduction on Forward and Reverse mode differentiation.
-- [Section 7.6 Oxford Maths C6.1 Numerical Linear Algebra Notes (2023-2024)](https://courses.maths.ox.ac.uk/course/view.php?id=5024#section-1)
-- [Fast linear algebra is stable - James Demel, Ioana Dumitriu, Olga Holtz (2007)](https://arxiv.org/abs/math/0612264)
-- [Memory-Efficient Backpropagation Through Time - Deepmind (2016)](https://arxiv.org/abs/1606.03401)
-- [The Symplectic Adjoint Method: Memory-Efficient Backpropagation of Neural-Network-Based Differential Equations - Takashi Matsubara, Yuto Miyatake, Takaharu Yaguchi (2023)](https://ieeexplore.ieee.org/document/10045756)
-- [AlexNet](https://en.wikipedia.org/wiki/AlexNet)
+{% bibliography --cited_in_order %}
 
 ## Notation
 As an example, let us take $m=3$ where $f = f_{3} \circ f_{2} \circ f_{1} \circ x$ and let us use $x_{i} \in \mathbb{R}^{d_{i-1}}$ as a dummy variable to represent the input of $f_{i}$.
