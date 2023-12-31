@@ -147,7 +147,7 @@ These two reasons demonstrate why backward mode is appealing. However, the next 
 ### Memory Cost
 In forward mode, we only need to store the previous Transition Jacobian $\frac{df_{i+1}}{df_{u}}$ which yields a memory cost of $O(d^{2})$.
 
-On the other hand, backward mode needs to store all the Transition Jacobians during the forward pass as it can only use them during the backward pass. This leads to a memory cost of $O(md^{2})$ (same order as computation complexity).
+On the other hand, backward mode needs to store all the Transition Jacobians during the forward pass as it can only use them during the backward pass. This leads to a memory cost of $O(md^{2})$. This is the same order as its computational complexity and the number parameters of the associated neural network.
 
 As the computational powers of computers are plateauing and applications often call for neural networks with millions of parameters, memory can be a bottleneck. There have been some attempts to alleviate this.
 - Memory-Efficient Backpropagation Through Time {% cite gruslysMemoryEfficientBackpropagationTime2016 %}
