@@ -8,14 +8,14 @@ math: true
 ---
 
 <!-- TODO: Can we make this a call out? -->
-Methods to efficiently compute gradients are important as they underpin the training of Machine Learning Models. In particular, we compare Forward and Reverse Mode Differentiation for gradient estimation of function compositions. The ubiquitous Backpropagation Algorithm is simply Reverse Mode Differentiation applied to Neural Networks. We will show why its forward counterpart has been ignored and highlight a key limitation of Backward Mode Differentiation.
+Methods to efficiently compute gradients are important as gradients underpin the training of machine learning models. In particular, we compare forward and backward mode differentiation for gradients of function compositions. In the domain of Neural Networks, the ubiquitous backpropagation algorithm is simply backward mode differentiation. We will show why its forward counterpart has been historically disregarded and highlight a key limitation of backward mode differentiation.
 
 ## Background
-Given functions $f_{0}, f_{1}, \dots, f_{m}$ with known Jacobians and $f_{0}(x) := x$, we want to compute the Jacobian of their composition $f$.
+Given functions $f_{0}(x) := x$ and $f_{1}, \dots, f_{m}$ with known Jacobians, we want to compute the Jacobian of their composition
 
 $$
-f_{i}:\mathbb{R}^{d_{i-1}} \to \mathbb{R}^{d_{i}},\quad
-f(x) = f_{m} \circ \cdots \circ f_{1} (x)
+f(x) = f_{m} \circ \cdots \circ f_{1} (x),\quad
+f_{i}:\mathbb{R}^{d_{i-1}} \to \mathbb{R}^{d_{i}}.
 $$
 
 By the Chain Rule,
@@ -35,7 +35,7 @@ $$
 = \prod_{i=1}^{m+1} \frac{df_{i}}{df_{i-1}}.
 $$
 
-Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently. We follow Appendix A.1 from {% cite kidgerNeuralDifferentialEquations2022 %} for details.
+We refer to each term in the product as a Transition Jacobian.
 
 > Recall that Jacobian of $f : \mathbb{R}^{d_{0}} \to \mathbb{R}^{d_{m}}$ is defined as
 > $$
@@ -51,7 +51,9 @@ Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently. We 
 > See Notation section at end of page for clarification on what is meant by $\frac{df_{i}}{df_{i-1}}$.
 <!-- Can't link internally? -->
 
-### Forward-Mode Differentiation
+Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently. We follow Appendix A.1 from {% cite kidgerNeuralDifferentialEquations2022 %} for details.
+
+### Forward Mode Differentiation
 This method studies how the intermediate layers $f_{i}$ vary with the initial layer $x$. We apply a forward recursion until we obtain the Jacobian of the final layer $f$. In particular, for $i = 0, \dots, m-1$
 
 $$
@@ -65,19 +67,19 @@ $$
 \,
 \underset{ d_{i} \times d_{0} }{ \frac{df_{i}}{dx}
 \vphantom{\frac{df_{i+1}}{df_{i}}}
-}
+}.
 $$
 
 The algorithm comprises of one pass which computes $f(x)$ and $\frac{df}{dx}$
 - Base Case $f_{0} = x$ and $\frac{df_{0}}{dx} = I$ (Identity matrix)
 - Iteration $i$:
     - Recall $x_{i}$ and $\frac{df_{i}}{dx}$ from the previous iteration
-    - Compute $x_{i+1} = f_{i+1}(x_{i})$ and "transition jacobians" $\frac{df_{i+1}}{df_{i}}(x_{i})$
+    - Compute $x_{i+1} = f_{i+1}(x_{i})$ and Transition Jacobians $\frac{df_{i+1}}{df_{i}}(x_{i})$
     - Compute $\frac{df_{i+1}}{dx} = \frac{df_{i+1}}{df_{i}} \frac{df_{i}}{dx}$
     - Set $i = i + 1$
 - At iteration $m$, return $\frac{df_{m}}{dx}$
 
-### Reverse-Mode Differentiation
+### Backward Mode Differentiation
 This method studies how the output $f$ varies with the intermediate layers $f_{i}$. We apply a backward recursion until we obtain the Jacobian with respect to the initial layer $x$. In particular for $i = 0, \dots, m-1$, we use the formula
 
 $$
@@ -91,11 +93,11 @@ $$
 \;
 \underset{ d_{m-i} \times d_{m-i-1} }{ \frac{df_{m-i}}{df_{m-i-1}}
 \vphantom{\frac{df_{m}}{df_{m-i}}}
-}
+}.
 $$
 
-The algorithm comprises of two passes.
-- The forward pass computes $f_{i}$ and the "transition jacobians" $\frac{df_{i}}{df_{i-1}}$
+The algorithm comprises two passes.
+- The forward pass computes $f_{i}$ and the Transition Jacobians $\frac{df_{i}}{df_{i-1}}$
     - Same as forward mode but we do not compute $\frac{df_{i+1}}{dx}$
 - The backward pass computes $\frac{df_{m}}{dx}$.
     - Base case $\frac{df_{m}}{df_{m}} = I$
@@ -105,33 +107,35 @@ The algorithm comprises of two passes.
     - At iteration $m$ return $\frac{df_{m}}{df_{0}} = \frac{df_{m}}{dx}$
 
 ## Comparison
-The direction of recursion in forward and backward mode yields the method's name but it also results in the cost being dependent on the input and output dimensions respectively. In general, a recursion comprises of Matrix-Matrix Multiplication which is $O(d^{3})$ where $d = \max d_{i}$. However
-- If $d_{0} = 1$ and $x$ is a scalar, then forward recursion comprises of a Matrix-Vector Multiplication, $O(n^{2})$
-- Likewise if $d_{m} = 1$ and $f$ is a scalar, then backward recursion comprises of Vector-Matrix Multiplication, also $O(n^{2})$.
+The direction of recursion in forward and backward mode yields the method's name but it also results in the cost being dependent on the input and output dimensions respectively. In general, a recursion comprises matrix-matrix multiplication which is $O(d^{3})$ where $d = \max d_{i}$. However
+- If $d_{0} = 1$ and $x$ is a scalar, then forward recursion comprises of a matrix-vector multiplication, $O(d^{2})$
+- Likewise, if $d_{m} = 1$ and $f$ is a scalar, then backward recursion comprises vector-matrix multiplication, also $O(d^{2})$.
 
-In the context of Neural Networks, $f$ typically corresponds to a 1-dimensional loss function (e.g. Cross-Entropy for classification and Mean-Square Error in regression) and this is the case we will consider.
+In the context of Neural Networks, $f$ typically corresponds to a scalar / 1D loss function (e.g. cross-entropy for classification and mean-squared error in regression). Hence, this is the case we will consider.
 
 ### Computational-Cost
-In terms of function evaluations and computation of transition jacobians, Forward and Backward mode are the same. We only need to consider the cost of the recursion.
+In terms of function evaluations and computation of Transition Jacobians, forward and backward modes are identical. Hence, we only need to consider the cost of the recursion.
 
-For Forward mode this is $O(md^{3})$ whereas only having to perform Vector-Matrix Multiplication reduces the complexity of Backward Mode to $O(md^{2})$.
+For forward mode, this is $O(md^{3})$ whereas only having to perform vector-matrix multiplication reduces the complexity of backward mode to $O(md^{2})$.
 
 ### Numerical Stability
-This discrepancy in computational cost is closely related to the common trick used in Numerical Linear Algebra where $ABx$ is evaluated as $A(Bx)$ as opposed to $(AB)x$.
+This discrepancy in computational cost is closely related to the common trick used in numerical linear algebra where $ABx$ is evaluated as $A(Bx)$ as opposed to $(AB)x$.
 
-The other reason this is beneficial, is because Matrix-Matrix multiplication is not numerically (backward) stable whereas Matrix-Vector Multiplication is. See {% cite ox_c61_nla -L chapter -l 7.6 %}. This means that a naive implementation of Forward Mode would be unstable.
+The other reason this is beneficial is that matrix-vector multiplication is numerically (backward) stable whereas matrix-matrix multiplication is not, see {% cite ox_c61_nla -L chapter -l 7.6 %}. This means that a naive implementation of forward mode would be unstable.
 
-The stability of matrix multiplication can be improved for a slight increase in computational complexity, see {% cite demmelFastLinearAlgebra2007 %}. Despite, the paper claiming these algorithms are parallelisable, it is unlikely to have an implementation with minimised constant factors due to its age. In particular this means, the increase in computing time would be exacerbated by a difference in software.
+The stability of matrix multiplication can be improved for a slight increase in computational complexity, see {% cite demmelFastLinearAlgebra2007 %}. Despite, the paper claiming these algorithms are parallelisable, it is unlikely to have an implementation with minimised constant factors due to its novelty. Therefore, the increase in computing time for a stable algorithm would be exacerbated by a difference in software.
 
-These two reasons demonstrate why Backward Mode is appealing. However the next section, demonstrates its major caveat.
+These two reasons demonstrate why backward mode is appealing. However, the next section outlines its major caveat.
 
-### Memory-Cost
-In Forward Mode, we only need to store the previous transition jacobians $\frac{df_{i+1}}{df_{u}}$ which yields a memory cost of $O(d^{2})$.
+### Memory Cost
+In forward mode, we only need to store the previous Transition Jacobian $\frac{df_{i+1}}{df_{u}}$ which yields a memory cost of $O(d^{2})$.
 
-On the other hand, Backward Mode needs to store all the transition jacobians during the forward pass as it can only use them during the backward pass. This leads to a memory cost of $O(md^{3})$.
+On the other hand, backward mode needs to store all the Transition Jacobians during the forward pass as it can only use them during the backward pass. This leads to a memory cost of $O(md^{2})$ (same order as computation complexity).
 
-As the computational powers of computers are plateauing and applications often call for neural networks with millions of parameters, memory can be a bottleneck. There has been some attempts to alleviate this.
-- Memory-Efficient Backpropagation Through Time {% cite gruslysMemoryEfficientBackpropagationTime2016 %} proposed a method which decreased the memory usage by 95% for backpropagation in a recurrent neural network. For recurrent neural networks, because the depth $m$ is large, the memory cost is acutely felt.
+As the computational powers of computers are plateauing and applications often call for neural networks with millions of parameters, memory can be a bottleneck. There have been some attempts to alleviate this.
+- Memory-Efficient Backpropagation Through Time {% cite gruslysMemoryEfficientBackpropagationTime2016 %}
+    - Proposed a method that decreased memory usage by 95% for backpropagation in a recurrent neural network.
+    - For recurrent neural networks, because the depth $m$ is large, the memory cost is acutely felt.
     - (Unsure: I will aim to discuss this paper in another post. But I think the idea is to recompute the earlier gradients from scratch in the backward pass as opposed to holding them for the entire run. This increases computational cost.)
 - The Symplectic Adjoint Method: Memory-Efficient Backpropagation of Neural-Network-Based Differential Equations {% cite matsubaraSymplecticAdjointMethod2023 %}
     - Neural-Based Differential Equation refers to $du = f_{\theta}(u) dt$ where $f_{\theta}$ is a neural network.
@@ -139,26 +143,24 @@ As the computational powers of computers are plateauing and applications often c
     - The adjoint method only requires $O(md^{3})$ memory but is numerically unstable.
     - Their new method retains the computational complexity of the adjoint method whilst retaining numerical stability.
 
-These two papers indicate that academia is starting to view memory cost as an important consideration when designing algorithms.
+These two papers indicate that memory cost is becoming a critical consideration in the design of algorithms.
 
 ## Conclusion
-Forward Mode computes gradients while it evaluates the function $f$ whereas Backward Mode computes gradients in reverse after evaluation.
+Forward mode computes gradients while it evaluates the function $f$ whereas backward mode computes gradients in reverse after evaluation. Since $f$ is typically a scalar, forward mode takes longer to run whereas backward mode requires more memory.
 
-Since $f$ is a typically a scalar, Forward Mode takes longer to run whereas Backward Mode requires more memory.
-
-In the past, the speed of training neural networks has been the main concern. The application of the Backpropagation algorithm and advances in GPU-acceleration were necessary to demonstrate the feasibility of Neural networks, see AlexNet {% cite wiki:AlexNet %}. However, memory limitations are now emerging as a concern and practitioners will need to find a way to balance the trade-off between Computational Time and Memory Space.
+In the past, the speed of training neural networks has been the main concern. The application of the backpropagation algorithm and advances in GPU-acceleration were necessary to demonstrate the feasibility of Neural networks, see AlexNet {% cite wiki:AlexNet %}. However, memory limitations are now emerging as a concern and practitioners will need to find a way to balance the classical Time-Space tradeoff.
 
 |Mode|Computation|Memory|Stability|
 |-|-|-|-|
-|Forward|$O(md^{3})$|$O(d^{3})$|Unstable|
-|Backward|$O(md^{2})$|$O(md^{3})$|Stable|
+|Forward|$O(md^{3})$|$O(d^{2})$|Unstable|
+|Backward|$O(md^{2})$|$O(md^{2})$|Stable|
 
 ## References
 {% bibliography --cited_in_order %}
 
 ## Notation
 As an example, let us take $m=3$ where $f = f_{3} \circ f_{2} \circ f_{1} \circ x$ and let us use $x_{i} \in \mathbb{R}^{d_{i-1}}$ as a dummy variable to represent the input of $f_{i}$.
-Formally, Chain Rule is stated as
+Formally, the Chain Rule is stated as
 
 $$
 \left. \frac{df}{dx} \right \rvert_{x}
@@ -168,7 +170,7 @@ $$
 \left. \frac{df_{1}}{dx_{1}} \right \rvert_{x_1 =  x}.
 $$
 
-This is quite burdensome to write and by abuse of notation,
+This is notationally burdensome and by abuse of notation,
 
 $$
 \frac{df}{dx}
@@ -178,4 +180,4 @@ $$
 \frac{df_{1}}{dx}.
 $$
 
-Nevertheless, it is somewhat fitting as our evaluation point is a function of $f_{i-1}$ hence $f_{i-1}$ has the correct dimension for $x_{i}$.
+Nevertheless, it is suitable as our evaluation point is an evaluation of $f_{i-1}$ and hence has the correct dimension and value.
