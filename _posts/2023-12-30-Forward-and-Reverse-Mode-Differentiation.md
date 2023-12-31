@@ -37,7 +37,7 @@ $$
 \underset{ d_{1} \times d_{0} }{ \frac{df_{1}}{df_{0}}
 \vphantom{\frac{df_{m}}{df_{m-1}}}
 }
-= \prod_{i=1}^{m+1} \frac{df_{i}}{df_{i-1}}.
+= \prod_{i=1}^{m} \frac{df_{i}}{df_{i-1}}.
 $$
 
 We refer to each term in the product as a Transition Jacobian.
@@ -149,7 +149,7 @@ The other reason this is beneficial is that matrix-vector multiplication is nume
 
 The stability of matrix multiplication can be improved for a slight increase in computational complexity, see {% cite demmelFastLinearAlgebra2007 %}. Despite, the paper claiming these algorithms are parallelisable, it is unlikely to have an implementation with minimised constant factors due to its novelty. Therefore, the increase in computing time for a stable algorithm would be exacerbated by a difference in software.
 
-These two reasons demonstrate why backward mode is appealing. However, the next section outlines its major caveat.
+These two reasons demonstrate why backward mode is appealing. However, the next section outlines its major drawback.
 
 ### Memory Cost
 In forward mode, we only need to store the previous Transition Jacobian $\frac{df_{i+1}}{df_{u}}$ which yields a memory cost of $O(d^{2})$.
@@ -165,9 +165,9 @@ As the computational powers of computers are plateauing and applications often c
     - Neural-Based Differential Equation refers to $du = f_{\theta}(u) dt$ where $f_{\theta}$ is a neural network.
     - Evaluating $u$ can be done through numerical integration which requires evaluation of $f_{\theta}$ say $n$ times. As we need to combine these values, we need to hold $O(nmd^{3})$ in memory.
     - The adjoint method only requires $O(md^{3})$ memory but is numerically unstable.
-    - Their new method retains the computational complexity of the adjoint method whilst retaining numerical stability.
+    - Their method is numerically stable while retaining the memory requirements of the adjoint method at the expense of increased computational cost.
 
-These two papers indicate that memory cost is becoming a critical consideration in the design of algorithms.
+These two papers indicate that memory cost is becoming a critical consideration in the design of algorithms. Often memory requirements are reduced by increasing computational cost.
 
 ## Conclusion
 Forward mode computes gradients while it evaluates the function $f$ whereas backward mode computes gradients in reverse after evaluation. Since $f$ is typically a scalar, forward mode takes longer to run whereas backward mode requires more memory.
