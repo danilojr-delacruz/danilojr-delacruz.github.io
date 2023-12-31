@@ -118,6 +118,9 @@ baseurl: ""
 
 # ------------ Extensions
 
+plugins:
+  - jekyll-scholar
+
 # Use default for jekyll scholar
 # scholar:
 
