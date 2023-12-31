@@ -3,7 +3,7 @@ $primary-bgcolor: rgba(55.59%, 44.41%, 0%, .4);
 $admonitions:
     //class (type), icon filename, icon/border color, title bg color
     ('note', 'pencil.svg')
-    ('abstract', 'checklist.svg')
+    ('abstract', 'checklist.svg', '#53dfdd', '#233232')
     ('info', 'info.svg', '#00b0ff', '#293d52')
     ('tip', 'flame.svg', '#ff9100', '#433a38')
     ('success', 'check-circle.svg', '#00c953', '#294040')
