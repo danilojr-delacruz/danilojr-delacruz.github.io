@@ -8,8 +8,12 @@ math: true
 ---
 
 {% include admonition.html type="abstract" title="Summary" body="
-Methods to efficiently compute gradients are important as gradients underpin the training of machine learning models. In particular, we compare forward and backward mode differentiation for gradients of function compositions. In the domain of Neural Networks, the ubiquitous backpropagation algorithm is simply backward mode differentiation. We will show why its forward counterpart has been historically disregarded and highlight a key limitation of backward mode differentiation.
-" %}
+Methods to efficiently compute gradients are important as gradients underpin the training of machine learning models. In this article, we will compare forward and backward mode differentiation for gradients of function compositions.
+<br>
+<br>
+This is particularly relevant to Neural Networks where the ubiquitous backpropagation algorithm is simply backward mode differentiation. Its forward counterpart has historically been ignored as it runs too slowly. However, backward mode requires more memory and memory limitations are now emerging as a concern. In order to work with larger models, practitioners must address the classical Time-Space tradeoff.
+"
+%}
 
 ## Background
 Given functions $f_{0}(x) := x$ and $f_{1}, \dots, f_{m}$ with known Jacobians, we want to compute the Jacobian of their composition
