@@ -8,10 +8,10 @@ math: true
 ---
 
 <!-- TODO: Can we make this a call out? -->
-> Methods to efficiently compute gradients are important as they underpin the training of Machine Learning Models. In particular, we compare Forward and Reverse Mode Differentiation for gradient estimation of function compositions. The ubiquitous Backpropagation Algorithm is simply Reverse Mode Differentiation applied to Neural Networks. We will show why its forward counterpart has been ignored and highlight a key limitation of Backward Mode Differentiation.
+Methods to efficiently compute gradients are important as they underpin the training of Machine Learning Models. In particular, we compare Forward and Reverse Mode Differentiation for gradient estimation of function compositions. The ubiquitous Backpropagation Algorithm is simply Reverse Mode Differentiation applied to Neural Networks. We will show why its forward counterpart has been ignored and highlight a key limitation of Backward Mode Differentiation.
 
 ## Background
-Given functions $f_{0}, f_{1}, \dots, f_{m}$ with known Jacobians, where $f_{0}(x) = x$. We want to compute the Jacobian of $f$.
+Given functions $f_{0}, f_{1}, \dots, f_{m}$ with known Jacobians and $f_{0}(x) := x$, we want to compute the Jacobian of their composition $f$.
 
 $$
 f_{i}:\mathbb{R}^{d_{i-1}} \to \mathbb{R}^{d_{i}},\quad
@@ -74,7 +74,7 @@ The algorithm comprises of one pass which computes $f(x)$ and $\frac{df}{dx}$
     - Recall $x_{i}$ and $\frac{df_{i}}{dx}$ from the previous iteration
     - Compute $x_{i+1} = f_{i+1}(x_{i})$ and "transition jacobians" $\frac{df_{i+1}}{df_{i}}(x_{i})$
     - Compute $\frac{df_{i+1}}{dx} = \frac{df_{i+1}}{df_{i}} \frac{df_{i}}{dx}$
-    - $i = i + 1$
+    - Set $i = i + 1$
 - At iteration $m$, return $\frac{df_{m}}{dx}$
 
 ### Reverse-Mode Differentiation
@@ -105,7 +105,7 @@ The algorithm comprises of two passes.
     - At iteration $m$ return $\frac{df_{m}}{df_{0}} = \frac{df_{m}}{dx}$
 
 ## Comparison
-The direction of recursion in forward and backward mode yields the method's name but it also results in the cost being dependent on the input and output dimensions. In general, a recursion comprises of Matrix-Matrix Multiplication which is $O(d^{3})$ where $d = \max d_{i}$. However
+The direction of recursion in forward and backward mode yields the method's name but it also results in the cost being dependent on the input and output dimensions respectively. In general, a recursion comprises of Matrix-Matrix Multiplication which is $O(d^{3})$ where $d = \max d_{i}$. However
 - If $d_{0} = 1$ and $x$ is a scalar, then forward recursion comprises of a Matrix-Vector Multiplication, $O(n^{2})$
 - Likewise if $d_{m} = 1$ and $f$ is a scalar, then backward recursion comprises of Vector-Matrix Multiplication, also $O(n^{2})$.
 
@@ -134,9 +134,9 @@ As the computational powers of computers are plateauing and applications often c
 - [Memory-Efficient Backpropagation Through Time - Deepmind (2016)](https://arxiv.org/abs/1606.03401) proposed a method which decreased the memory usage by 95% for backpropagation in a recurrent neural network. For recurrent neural networks, because the depth $m$ is large, the memory cost is acutely felt.
     - (Unsure: I will aim to discuss this paper in another post. But I think the idea is to recompute the earlier gradients from scratch in the backward pass as opposed to holding them for the entire run. This increases computational cost.)
 - [The Symplectic Adjoint Method: Memory-Efficient Backpropagation of Neural-Network-Based Differential Equations - Takashi Matsubara, Yuto Miyatake, Takaharu Yaguchi (2023)](https://ieeexplore.ieee.org/document/10045756)
-    - Here $du = f_{\theta}(u) dt$ where $f_{\theta}$ is a neural network.
-    - If we perform numerical integration, then we need to evaluate $f_{\theta}$ say $n$ times. Then we will need to hold $O(nmd^{3})$ in memory.
-    - The adjoint method only requires one evaluation but is numerically unstable.
+    - Neural-Based Differential Equation refers to $du = f_{\theta}(u) dt$ where $f_{\theta}$ is a neural network.
+    - Evaluating $u$ can be done through numerical integration which requires evaluation of $f_{\theta}$ say $n$ times. As we need to combine these values, we need to hold $O(nmd^{3})$ in memory.
+    - The adjoint method only requires $O(md^{3})$ memory but is numerically unstable.
     - Their new method retains the computational complexity of the adjoint method whilst retaining numerical stability.
 
 These two papers indicate that academia is starting to view memory cost as an important consideration when designing algorithms.
@@ -150,7 +150,7 @@ In the past, the speed of training neural networks has been the main concern. Th
 
 |Mode|Computation|Memory|Stability|
 |-|-|-|-|
-|Forward|$O(md^{3})$|$O(d^{3})$|Less|
+|Forward|$O(md^{3})$|$O(d^{3})$|Unstable|
 |Backward|$O(md^{2})$|$O(md^{3})$|Stable|
 
 <!-- Better way to do referencing in markdown? -->
@@ -184,4 +184,4 @@ $$
 \frac{df_{1}}{dx}.
 $$
 
-Nevertheless it is somewhat fitting as our evaluation point is a function of $f_{i-1}$ hence $f_{i-1}$ has the correct dimension for $x_{i}$.
+Nevertheless, it is somewhat fitting as our evaluation point is a function of $f_{i-1}$ hence $f_{i-1}$ has the correct dimension for $x_{i}$.
