@@ -130,6 +130,13 @@ The direction of recursion in forward and backward mode yields the method's name
 
 In the context of Neural Networks, $f$ typically corresponds to a scalar / 1D loss function (e.g. cross-entropy for classification and mean-squared error in regression). Hence, this is the case we will consider.
 
+<!-- How to reconcile white and black background with transparent? -->
+<figure>
+    <img src="/assets/figures/Forward-Backward-Differentation.png"
+         alt="Forward-Backward-Differentiation">
+    <figcaption>Figure 1: Visualisation of Forward and Backward Differentiation.</figcaption>
+</figure>
+
 ### Computational-Cost
 In terms of function evaluations and computation of Transition Jacobians, forward and backward modes are identical. Hence, we only need to consider the cost of the recursion.
 
