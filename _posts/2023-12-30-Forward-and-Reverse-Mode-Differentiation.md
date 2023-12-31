@@ -12,11 +12,14 @@ math: true
 
 ## Background
 Given functions $f_{0}, f_{1}, \dots, f_{m}$ with known Jacobians, where $f_{0}(x) = x$. We want to compute the Jacobian of $f$.
+
 $$
 f_{i}:\mathbb{R}^{d_{i-1}} \to \mathbb{R}^{d_{i}},\quad
 f(x) = f_{m} \circ \cdots \circ f_{1} (x)
 $$
+
 By the Chain Rule,
+
 $$
 \underset{ d_{m} \times d_{0} }{ \frac{df}{dx}
 \vphantom{\frac{df_{m}}{df_{m-1}}}
@@ -31,6 +34,7 @@ $$
 }
 = \prod_{i=1}^{m+1} \frac{df_{i}}{df_{i-1}}.
 $$
+
 Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently.
 
 > Recall that Jacobian of $f : \mathbb{R}^{d_{0}} \to \mathbb{R}^{d_{m}}$ is defined as
@@ -49,6 +53,7 @@ Now it remains to establish a scheme to compute $\frac{df}{dx}$ efficiently.
 
 ### Forward-Mode Differentiation
 This method studies how the intermediate layers $f_{i}$ vary with the initial layer $x$. We apply a forward recursion until we obtain the Jacobian of the final layer $f$. In particular, for $i = 0, \dots, m-1$
+
 $$
 \underset{ d_{i+1} \times d_{0} }{ \frac{df_{i+1}}{dx}
 \vphantom{\frac{df_{i+1}}{df_{i}}}
@@ -62,6 +67,7 @@ $$
 \vphantom{\frac{df_{i+1}}{df_{i}}}
 }
 $$
+
 The algorithm comprises of one pass which computes $f(x)$ and $\frac{df}{dx}$
 - Base Case $f_{0} = x$ and $\frac{df_{0}}{dx} = I$ (Identity matrix)
 - Iteration $i$:
@@ -73,6 +79,7 @@ The algorithm comprises of one pass which computes $f(x)$ and $\frac{df}{dx}$
 
 ### Reverse-Mode Differentiation
 This method studies how the output $f$ varies with the intermediate layers $f_{i}$. We apply a backward recursion until we obtain the Jacobian with respect to the initial layer $x$. In particular for $i = 0, \dots, m-1$, we use the formula
+
 $$
 \underset{ d_{m} \times d_{m-i-1} }{ \frac{df_{m}}{df_{m-i - 1}}
 \vphantom{\frac{df_{m}}{df_{m-i}}}
@@ -86,6 +93,7 @@ $$
 \vphantom{\frac{df_{m}}{df_{m-i}}}
 }
 $$
+
 The algorithm comprises of two passes.
 - The forward pass computes $f_{i}$ and the "transition jacobians" $\frac{df_{i}}{df_{i-1}}$
     - Same as forward mode but we do not compute $\frac{df_{i+1}}{dx}$
@@ -157,6 +165,7 @@ In the past, the speed of training neural networks has been the main concern. Th
 ## Notation
 As an example, let us take $m=3$ where $f = f_{3} \circ f_{2} \circ f_{1} \circ x$ and let us use $x_{i} \in \mathbb{R}^{d_{i-1}}$ as a dummy variable to represent the input of $f_{i}$.
 Formally, Chain Rule is stated as
+
 $$
 \left. \frac{df}{dx} \right \rvert_{x}
 =
@@ -164,7 +173,9 @@ $$
 \left. \frac{df_{2}}{dx_{2}} \right \rvert_{x_{2} = f_{1} \circ x}
 \left. \frac{df_{1}}{dx_{1}} \right \rvert_{x_1 =  x}.
 $$
+
 This is quite burdensome to write and by abuse of notation,
+
 $$
 \frac{df}{dx}
 =
@@ -172,4 +183,5 @@ $$
 \frac{df_{2}}{df_{1}}
 \frac{df_{1}}{dx}.
 $$
+
 Nevertheless it is somewhat fitting as our evaluation point is a function of $f_{i-1}$ hence $f_{i-1}$ has the correct dimension for $x_{i}$.
