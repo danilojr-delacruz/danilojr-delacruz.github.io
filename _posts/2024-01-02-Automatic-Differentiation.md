@@ -3,7 +3,7 @@ title: Automatic Differentiation
 date: 2024-01-02
 categories: [Machine Learning, Implementation]
 tags: [ml]     # TAG names should always be lowercase
-publish: false
+published: false
 math: true
 ---
 

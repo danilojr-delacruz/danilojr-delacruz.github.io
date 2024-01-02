@@ -3,7 +3,7 @@ title: Forward and Reverse Mode Differentiation
 date: 2023-12-30
 categories: [Machine Learning, Implementation]
 tags: [ml]     # TAG names should always be lowercase
-publish: true
+published: true
 math: true
 ---
 
